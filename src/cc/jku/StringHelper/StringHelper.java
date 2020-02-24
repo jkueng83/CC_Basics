@@ -44,6 +44,7 @@ public class StringHelper {
 
                 if (actualChar == j) {
                     numbersOfLetters[j]++;
+                    break;
                 }
 
             }
