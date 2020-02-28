@@ -32,16 +32,30 @@ public class TicTacToe {
         char player2Char = 'X';
 
         boolean gameIsFinished = false;
+        boolean player1IsActive = true;
 
         // Play the game
         while (!gameIsFinished) {
-            gameSelectField(fieldsInTicTacToe, player1Char);
-            printTheGame(fieldsInTicTacToe);
 
-            gameIsFinished = checkGameIsFinished(fieldsInTicTacToe, player1Char);
+            if (player1IsActive){
+                gameSelectField(fieldsInTicTacToe, player1Char);
+                printTheGame(fieldsInTicTacToe);
 
+                gameIsFinished = checkGameIsFinished(fieldsInTicTacToe, player1Char);
+
+            }else {
+                gameSelectField(fieldsInTicTacToe, player2Char);
+                printTheGame(fieldsInTicTacToe);
+
+                gameIsFinished = checkGameIsFinished(fieldsInTicTacToe, player2Char);
+
+            }
+
+            player1IsActive = !player1IsActive ; // Spieler wechseln
 
         }
+
+        System.out.println("game is finish!");
 
 
     }
@@ -99,38 +113,92 @@ public class TicTacToe {
             }
         }
         if (gameIsFinish) {
-            System.out.println("player " + player1Char + " won the game!");
+            System.out.println("player '" + player1Char + "' won the game!");
         }
+
+        if (!gameIsFinish){
+            int counter = 0 ;
+            for (int i = 0; i < 3 ; i++) {
+                for (int j = 0; j <3 ; j++) {
+                    if (!(fieldsInTicTacToe[j][i] == '_' )) {
+                        counter++;
+                    }
+                }
+            }
+            if (counter >8){
+                // alle Felder sind voll
+                System.out.println("nobody won the game");
+                gameIsFinish = true ;
+            }
+        }
+
         return gameIsFinish;
     }
 
-    private static void gameSelectField(char[][] fieldsInTicTacToe, char player) {
+    private static void gameSelectField(char[][] fieldsInTicTacToe, char charPlayer) {
         boolean isFinished = false;
 
         while (!isFinished) {
 
 
-            System.out.println("enter your choice Player " + player);
+            System.out.println("enter your choice Player '" + charPlayer + "' e.g. 0,2 means for line number 0 and column 2");
 
             Scanner scanner = new Scanner(System.in);
 
             String stringScanner = scanner.nextLine();
+            boolean choiceIsWrong = false ;
+
+            boolean inputWithComma =  stringScanner.contains(","); // check if ',' is in the choice
+
+            if ((!inputWithComma) && (!choiceIsWrong)){
+                // make default when input is wrong
+                stringScanner = "-1,-1"; //no field in TicTacToe
+                System.out.println("your choice is wrong");
+                choiceIsWrong = true;
+
+            }
 
             String[] values = stringScanner.split(",");
 
             //Zeilennummer der Eingabe
-            int inputLineNumber = Integer.parseInt(values[0]);
+            int inputLineNumber = -1;
+
+            if (!choiceIsWrong) {
+                try {
+                    inputLineNumber = Integer.parseInt(values[0]);
+
+                } catch (Exception e) {
+                    System.out.println("your choice is wrong");
+                    choiceIsWrong = true;
+                }
+            }
+
 
             // Spaltennummer der Eingabe
-            int inputCulumNumber = Integer.parseInt(values[1]);
+            int inputCulumNumber = -1;
 
-            if ((inputLineNumber < 0) || (inputLineNumber > 2) || (inputCulumNumber < 0) || (inputCulumNumber > 2)) {
-                System.out.println("Ihre Eingabe ist falasch Bitte geben sie einen gültigen Wert ein:");
-            } else if ((fieldsInTicTacToe[inputLineNumber][inputCulumNumber] == 'X') || (fieldsInTicTacToe[inputLineNumber][inputCulumNumber] == 'O')) {
-                System.out.println("Das Feld ist schon belegt. Bitte eine Andere Eingabe machen");
-            } else {
-                isFinished = true;
-                fieldsInTicTacToe[inputLineNumber][inputCulumNumber] = player;
+            if (!choiceIsWrong) {
+                try {
+                    inputCulumNumber = Integer.parseInt(values[1]);
+
+                } catch (Exception e) {
+                    System.out.println("your choice is wrong");
+                    choiceIsWrong = true;
+                }
+            }
+
+            if (!choiceIsWrong) {
+
+                if ((inputLineNumber < 0) || (inputLineNumber > 2) || (inputCulumNumber < 0) || (inputCulumNumber > 2)) {
+                    System.out.println("your choice is wrong, please make an other choice.");
+                    choiceIsWrong = true;
+                } else if ((fieldsInTicTacToe[inputLineNumber][inputCulumNumber] == 'X') || (fieldsInTicTacToe[inputLineNumber][inputCulumNumber] == 'O')) {
+                    System.out.println("the field is occupied. please make an other choise.");
+                    choiceIsWrong = true;
+                } else {
+                    isFinished = true;
+                    fieldsInTicTacToe[inputLineNumber][inputCulumNumber] = charPlayer;
+                }
             }
         }
     }
