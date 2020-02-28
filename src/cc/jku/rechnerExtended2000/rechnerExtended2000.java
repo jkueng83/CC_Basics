@@ -1,5 +1,6 @@
 package cc.jku.rechnerExtended2000;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class rechnerExtended2000 {
@@ -75,10 +76,33 @@ public class rechnerExtended2000 {
         
         int posKlammerAuf = -1 ;
         int posKlemmerZu = -1 ;
-        for (int i = 0; i < 1; i++) {
-            
+
+
+        for (int i = 0; i < inputStringArray.length; i++) {
+            if (inputStringArray[i] == ")"){
+                posKlemmerZu = i ;
+                break;
+            }
+
         }
-        
+
+        for (int i = posKlemmerZu; i >= 0; i--) {
+            if (inputStringArray[i] == "("){
+                posKlammerAuf = i ;
+            }
+
+        }
+
+        for (int i = posKlammerAuf; i < posKlemmerZu ; i++) {
+
+            if (inputStringArray[i]== "*"){
+                double result = ( Double.parseDouble(  inputStringArray[i-1] ) /  Double.parseDouble(  inputStringArray[i+1] ) ) ;
+                System.out.println("Ergebnis " + result);
+
+            }
+
+        }
+
         
         
         
@@ -86,9 +110,35 @@ public class rechnerExtended2000 {
         double result = ( Double.parseDouble(  inputStringArray[2] ) /  Double.parseDouble(  inputStringArray[4] ) ) ;
         System.out.println("Ergebnis " + result);
 
-
-
     }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    public static ArrayList GetMyValues(){
+        ArrayList arrList = new ArrayList();
+        double[] calclationArray = {1.2, 2.9};
+        String[] stringArray = {"test", "test1"};
+        arrList.add(calclationArray);
+        arrList.add(stringArray);
+        return arrList;
+    }
 
 }
