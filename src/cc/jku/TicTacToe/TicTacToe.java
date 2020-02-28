@@ -208,7 +208,6 @@ public class TicTacToe {
             System.out.print("| ");
             for (int j = 0; j < fieldsInTicTacToe.length; j++) {
                 System.out.print("" + fieldsInTicTacToe[i][j] + " | ");
-
             }
             System.out.println();
 
