@@ -6,9 +6,12 @@ import java.util.Arrays;
 public class rechnerExtended2000 {
     public static void main(String[] args) {
 
-        String inputCalculation = "((9,5/4) *8) + (16/7) - 4";
+        String inputCalculation = "((9,5/4) *8) + (16/7) - 4"; //=17.285714285714285
+        inputCalculation = "   1-3,5678"; // =-2.5678
 
-         inputCalculation = "12,3512- 1-17,2635";
+        inputCalculation = "16.2358+   1-3,5678"; //=13.668000000000001
+
+        //inputCalculation ="(-1*5)";  // geht noch nicht mit (-1......
         System.out.println(inputCalculation);
 
         String inputCalculationWithoutSpace = inputCalculation.replace(" ", "");
@@ -23,6 +26,9 @@ public class rechnerExtended2000 {
 
         for (int i = 0; i < inputCalculationWithoutSpace.length(); i++) {
             String string = inputCalculationWithoutSpace.substring(i, (i + 1));
+            if (calculationStringArray[counter]==null) {
+                calculationStringArray[counter] = "";
+            }
 
             switch (string) {
                 case "(":
@@ -35,24 +41,53 @@ public class rechnerExtended2000 {
                     //counter++;
                     break;
                 default:
-                    calculationStringArray[counter] = "";
-                    for (int j = i; j < inputCalculationWithoutSpace.length(); j++) {
 
-                        string = inputCalculationWithoutSpace.substring(j, (j + 1));
-                        string = inputCalculationWithoutSpace.substring(j, (j + 1));
-                        String[] arr = {"(", ")", "+", "-", "*", "/"};
-                        //Arrays.sort(arr);
-                        Arrays.sort(arr);
-                        int indexOf = Arrays.binarySearch(arr, string); // Das Array muss richtig sortiert sein, damit der Vergleich funktioniert.
-                        if (indexOf >= 0) {
-                            //counter++;
-                            i = j - 1;
-                            break;
-                        } else {
-                            calculationStringArray[counter] += string;
+                    if (true) {
+                        calculationStringArray[counter] += string;
+
+                        if ((i + 1) < inputCalculationWithoutSpace.length()) {
+                            String nextString = inputCalculationWithoutSpace.substring(i + 1, (i + 2));
+                            String[] arr = {"(", ")", "+", "-", "*", "/"};
+                            //Arrays.sort(arr);
+                            Arrays.sort(arr);
+                            int indexOf = Arrays.binarySearch(arr, nextString); // Das Array muss richtig sortiert sein, damit der Vergleich funktioniert.
+                            if (indexOf >= 0) {
+                                break; // wenn das nächste Zeichen keine Zahl ist
+                            }else {
+                                continue; // wenn das nächste Zeichen eine Zahl ist
+                            }
+
 
                         }
-                    }
+
+
+                    }/* else {
+                        calculationStringArray[counter] = "";
+                        for (int j = i; j < inputCalculationWithoutSpace.length(); j++) {
+
+                            int length = inputCalculation.length();
+
+                            string = inputCalculationWithoutSpace.substring(j, (j + 1));
+                            string = inputCalculationWithoutSpace.substring(j, (j + 1));
+                            String[] arr = {"(", ")", "+", "-", "*", "/"};
+                            //Arrays.sort(arr);
+                            Arrays.sort(arr);
+                            int indexOf = Arrays.binarySearch(arr, string); // Das Array muss richtig sortiert sein, damit der Vergleich funktioniert.
+                            if (indexOf >= 0) {
+                                //counter++;
+                                i = j - 1;
+                                break;
+                            } else {
+                                calculationStringArray[counter] += string;
+                                //i = j -1;
+                                //break;
+
+                            }
+
+                            //i=j-2;
+                        }
+
+                    }*/
 
                     break;
             }
