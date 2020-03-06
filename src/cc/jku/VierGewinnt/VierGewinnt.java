@@ -1,5 +1,6 @@
 package cc.jku.VierGewinnt;
 
+import java.awt.*;
 import java.util.Scanner;
 
 public class VierGewinnt {
@@ -17,7 +18,6 @@ public class VierGewinnt {
         printTheGame(numberOfLines, numberOfColumns, fields);
 
         while (!isFinish) {
-
 
 
             if (!player2IsActive) {
@@ -43,13 +43,14 @@ public class VierGewinnt {
     }
 
     private static boolean gameIsFinish(char[][] fields, char charPlayer) {
-        // Zeilen überprüfen - horizontal
+        // Zeilen überprüfen - horizontal - nebeneinander
         boolean gameIsFinish = false;
         int counter = 0;
         for (int line = 0; line < fields.length; line++) { //Zeile
+            counter = 0;
             for (int column = 0; column < fields[0].length; column++) { //Spalte
                 if (fields[line][column] == charPlayer) {
-                    if ((column == 0)) {
+                    if ((counter == 0)) {
                         counter++;
                     } else if ((fields[line][column - 1] == charPlayer)) {
                         counter++;
@@ -60,14 +61,61 @@ public class VierGewinnt {
             }
             if (counter >= 4) {
                 gameIsFinish = true;
-                System.out.println("player # " + charPlayer + " # won the game");
                 break;
             }
 
         }
 
-        if(!gameIsFinish){
-            // Spalten überprüfen
+        if (!gameIsFinish) {
+            // Spalten überprüfen - übereinander
+            counter = 0;
+            for (int column = 0; column < fields[0].length; column++) {
+                counter = 0;
+                for (int line = 0; line < fields.length; line++) {
+                    if (fields[line][column] == charPlayer) {
+                        if ((counter == 0)) {
+                            counter++;
+                        } else if ((fields[line - 1][column] == charPlayer)) {
+                            counter++;
+                        } else {
+                            counter = 0;
+                        }
+                    }
+                    if (counter >= 4) {
+                        gameIsFinish = true;
+                        break;
+                    }
+
+                }
+
+            }
+        }
+
+        if (!gameIsFinish) {
+            // Diagonale überprüfen
+            for (int line = 0; line < fields.length - 3; line++) {
+                for (int column = 0; column < fields[0].length - 3; column++) {
+                    if ((fields[line][column] == charPlayer) && (fields[line + 1][column + 1] == charPlayer) && (fields[line + 2][column + 2] == charPlayer) && (fields[line + 3][column + 3] == charPlayer)) {
+                        // links oben nach rechts unten
+                        gameIsFinish = true;
+                        break;
+                    }
+                    if ((fields[line + 3][column] == charPlayer) && (fields[line + 2][column + 1] == charPlayer) && (fields[line + 1][column + 2] == charPlayer) && (fields[line][column + 3] == charPlayer)) {
+                        // links unten nach rechts oben
+                        gameIsFinish = true;
+                        break;
+                    }
+
+                }
+                if (gameIsFinish) {
+                    break;
+                }
+            }
+        }
+
+        if (gameIsFinish) {
+            System.out.println("player # " + charPlayer + " # won the game");
+
         }
 
         return gameIsFinish;
@@ -77,7 +125,7 @@ public class VierGewinnt {
 
     private static void selectAColumn(int numberOfLines, int numberOfColumns, char[][] fields, char charPlayer) {
 
-        boolean selectionOk =false;
+        boolean selectionOk = false;
 
         while (!selectionOk) {
             int selectedColumn = 0;
@@ -86,7 +134,7 @@ public class VierGewinnt {
 
             System.out.println("player # " + charPlayer + " # select a column");
 
-            selectedColumn = scannInt(selectedColumn)-1;
+            selectedColumn = scannInt(selectedColumn) - 1;
 
             if ((0 > selectedColumn) || (selectedColumn >= numberOfColumns)) {
                 choiceIsWrong = true;// Außerhalb vom Spielfeld
@@ -107,11 +155,11 @@ public class VierGewinnt {
 
             if (!choiceIsWrong) {
 
-                for (int line = fields.length-1 ; line >= 0; line--) {
+                for (int line = fields.length - 1; line >= 0; line--) {
                     if ((fields[line][selectedColumn] == 0)) {
 
                         fields[line][selectedColumn] = charPlayer;
-                        selectionOk= true;
+                        selectionOk = true;
 
                         break;
 
@@ -126,7 +174,7 @@ public class VierGewinnt {
         Scanner scanner = new Scanner(System.in);
 
         try {
-            selectedColumn = scanner.nextInt() ;
+            selectedColumn = scanner.nextInt();
         } catch (Exception e) {
             // Keine Zahl
 
