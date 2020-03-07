@@ -1,6 +1,5 @@
 package cc.jku.VierGewinnt;
 
-import java.awt.*;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -27,7 +26,7 @@ public class VierGewinnt {
 
                 printTheGame(fields);
 
-                isFinish = gameIsFinish(fields, charPlayer1);
+                isFinish = isGameFinish(fields, charPlayer1);
 
             } else {
                 //selectAColumn(numberOfLines, numberOfColumns, fields, charPlayer2);
@@ -36,7 +35,7 @@ public class VierGewinnt {
 
                 printTheGame(fields);
 
-                isFinish = gameIsFinish(fields, charPlayer2);
+                isFinish = isGameFinish(fields, charPlayer2);
             }
 
 
@@ -57,37 +56,205 @@ public class VierGewinnt {
         while (!isSelectinOk) {
 
 
-            for (int numberOfCharInLine = 3; numberOfCharInLine > 0; numberOfCharInLine--) {
+            for (int searchNumberOfCharsInLine = 3; searchNumberOfCharsInLine > 0; searchNumberOfCharsInLine--) {
+                System.out.println("wir suchen " + searchNumberOfCharsInLine + " Steine nebeneinander");
                 int counter = 0;
-                for (int line = fields.length-1; line >= 0; line--) {
-                    counter = 0;
-                    for (int column = 0; column < fields[0].length; column++) {
-                        if (fields[line][column] == charComputer) {
-                            // Zeichen zählen die in einer Zeile nebeneinander sind
-                            if (counter == 0) {
-                                counter++;
-                            } else if ((fields[line][column - 1] == charComputer)) {
-                                counter++;
-                            } else {
-                                counter = 0;
+                if (!computerMadeChoice) {
+                    for (int line = fields.length - 1; line >= 0; line--) { // Steine suchen die nebeneinander liegen
+                        counter = 0;
+                        for (int column = 0; column < fields[0].length; column++) {
+
+                            System.out.println("Aktuelle Zeile: " + line + "Aktuelle Spalte " + column);
+
+                            if (fields[line][column] == charComputer) {
+                                // Zeichen zählen die in einer Zeile nebeneinander sind
+                                if (counter == 0) {
+                                    counter++;
+                                } else if ((fields[line][column - 1] == charComputer)) {
+                                    counter++;
+                                } else {
+                                    counter = 0;
+                                }
+
+                                System.out.println("Gezählte Steine nebeneinander: " + counter);
+
+                                if (counter >= searchNumberOfCharsInLine) {
+
+                                /*
+                                Wenn möglich zusätzlichen Stein setzen
+                                Wenn die Anzahl der Zeichen erreicht wird (zuerst 3, dann 2 und am Schluss 1)
+                                dann im Feld rechts daneben ein Zeichen setzen.
+                                Der Stein muss aber auch in die gleiche Zeile
+                                 */
+
+                                    int emptyFieldsOnLeftSideOrComputerChar = 0;
+                                    int emptyFieldsOnRightSideOrComputerCahr = 0;
+                                    for (int i = column + 1; i < fields[0].length; i++) {
+                                        if ((fields[line][i] == 0) || (fields[line][i] == charComputer)) {
+                                            emptyFieldsOnRightSideOrComputerCahr++;
+                                        } else {
+                                            break;
+                                        }
+
+                                    }
+                                    for (int i = (column - counter - 1); i >= 0; i--) {
+                                        if ((fields[line][i] == 0) || (fields[line][i] == charComputer)) {
+                                            emptyFieldsOnLeftSideOrComputerChar++;
+                                        } else {
+                                            break;
+                                        }
+                                    }
+
+
+                                    // Überprüfen ob 4 Steine nebeneinander  Platz haben
+                                    if ((emptyFieldsOnLeftSideOrComputerChar + counter + emptyFieldsOnRightSideOrComputerCahr) >= 4) {
+
+
+                                        // Stein auf der rechten Seite ergänzen
+                                        if ((column + 1) < fields[0].length) {
+
+                                            if (fields[line][column + 1] == 0) {
+
+                                            /*
+                                            Wenn nach den Zeichen (rechts) eine leeres Feld ist wird überprüft, ob der Stein
+                                            in diese Spalte in die gleiche Zeile geworfen werden kann:
+                                            */
+
+                                                if ((line == (fields.length - 1))) {  // es ist die unterste Zeile oder
+                                                    selectedColumnComputer = column + 1;
+                                                    computerMadeChoice = true;
+                                                } else if ((fields[line + 1][column + 1]) != 0) { // Feld darunter voll ist
+                                                    selectedColumnComputer = column + 1;
+                                                    computerMadeChoice = true;
+                                                }
+
+
+                                            }
+                                        }
+
+
+                                        if (!computerMadeChoice) {
+
+                                             /*
+                                            Wenn der Stein rechts nicht rein geworfen werden kann, dann wird versucht,
+                                            ob der Stein auf der linken Seite rein geworfen werden kann.
+                                            */
+
+                                            if ((column - searchNumberOfCharsInLine) > 0) {// Der erste Stein daf nicht ganz links sein
+                                                if (fields[line][(column - searchNumberOfCharsInLine)] == 0) {// das Feld links davon ist leer
+                                                    if (line == (fields.length - 1)) {
+                                                        // es ist die unterste Zeile --> Stein kann rein geworfen werden
+                                                        selectedColumnComputer = column - searchNumberOfCharsInLine;
+                                                        computerMadeChoice = true;
+
+                                                    } else if ((fields[line + 1][(column - searchNumberOfCharsInLine)]) != 0) {
+                                                        // Feld darunter voll ist --> Stein kann rein geworfen werden
+                                                        selectedColumnComputer = column - searchNumberOfCharsInLine;
+                                                        computerMadeChoice = true;
+                                                    }
+
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                }
+
+                            }
+                            if (computerMadeChoice) {
+                                break;
                             }
 
-                            if (counter >= numberOfCharInLine) {
-                                //Wenn möglich zusätzliches zeichen setzen
-                                if (column < (fields[0].length - 1)) {
-                                    if (fields[line][column + 1] == 0) &&((unterste ZEile)||(Feld darunter efüllt) ) {
-                                        // Wenn nach den Zeichen eine leeres Feld ist,
-                                        // dann wird der Stein in diese Spalte geworfen
-                                        selectedColumnComputer = column + 1;
+                        }
+
+                        if (computerMadeChoice) {
+                            break;
+                        }
+
+                    }
+                }
+
+                if (!computerMadeChoice) {
+                    /*
+                    Überprüfung wie viele die Steine übereinander rein geworfen wurden
+                     */
+                    for (int column = 0; column < fields.length; column++) { // Steine suchen die übereinander stehen
+                        counter = 0;
+                        for (int line = fields.length - 1; line >= 0; line--) {
+                            System.out.println("wir suchen " + searchNumberOfCharsInLine +
+                                    " Steine in einer Zeile - aktuell wird die Spalte " + column +
+                                    " und Zeile " + line + " überprüft");
+
+                            if ((fields[line][column]) == charComputer) {
+                                counter++; // Steine Zählen, die übereinander sind
+                            } else if ((fields[line][column]) == 0) {
+                                break; // Feld ist leer --> Schleife abbrechen
+                            } else {
+                                counter = 0; // wenn es ein anderes Zeichen ist, dann den Counter rücksetzen
+                            }
+
+
+                        }
+                        if (counter >= searchNumberOfCharsInLine) {
+                                /*
+                                Stein in die Spalte werfen wenn die Sollanzahl der Steine erreicht wird
+                                und die Spalte nicht voll ist.
+                                 */
+                            if (fields[column][0] == 0) {
+                                selectedColumnComputer = column;
+                                computerMadeChoice = true;
+                                break;
+                            }
+
+                        }
+                        if (computerMadeChoice) {
+                            break;
+                        }
+                    }
+                }
+
+                if (!computerMadeChoice) {
+                    // Diagonale überprüfen
+                    System.out.println("Diagonale prüfen");
+
+
+                    for (int line = (4 - searchNumberOfCharsInLine); line <= (fields.length - searchNumberOfCharsInLine); line++) {
+                    //for (int line = 0; line <= (fields.length - searchNumberOfCharsInLine); line++) {
+                        // Diagonale links oben nach rechts unten prüfen
+                        for (int column = (4 - searchNumberOfCharsInLine); column <= (fields[0].length - searchNumberOfCharsInLine); column++) {
+                        //for (int column = 0; column <= (fields[0].length - searchNumberOfCharsInLine); column++) {
+
+
+                            int counterDiagonal = 0;
+
+                            for (int i = 0; i < searchNumberOfCharsInLine; i++) {
+                                // Zähler links oben nach rechts unten
+                                if (fields[line + i][column + i] == charComputer) {
+                                    counterDiagonal++;
+                                }
+
+
+                            }
+                            System.out.println("Conter Diagonale: " + counterDiagonal);
+
+                            if (counterDiagonal >= searchNumberOfCharsInLine) {
+                                // Sollanzahl der Steine erreicht
+                                if (fields[line - counterDiagonal - 1][column - counterDiagonal - 1] == 0) {
+                                    // Überprüfen ob links darüber ein Stein gesetzt werden kann
+                                    if (fields[line - counterDiagonal][column - counterDiagonal - 1] != 0) {
+                                        //Stein fällt auf die richtige Höhe
+                                        selectedColumnComputer = column - counterDiagonal - 1;
                                         computerMadeChoice = true;
+                                        break;
                                     }
+                                } else if (fields[line + 1][column + 1] == 0) {
+                                    //Überprüfen ob rechts darunter ein Stein gesetzt werden kann.
                                 }
                             }
 
                         }
 
                     }
-
                 }
 
 
@@ -96,8 +263,10 @@ public class VierGewinnt {
 
             if (!computerMadeChoice) {
 
+
                 Random random = new Random();
                 selectedColumnComputer = random.nextInt(7);
+                System.out.println("the computer selected random number: " + selectedColumnComputer);
 
             }
 
@@ -109,19 +278,9 @@ public class VierGewinnt {
         }
 
 
-
-
-        /*
-
-        if (fields[numberOfLines - 1][actualColumn] == 0) {
-            fields[numberOfLines - 1][actualColumn - 1] = charComputer;
-            computerMadeChoice = true ;
-        }
-        */
-
     }
 
-    private static boolean gameIsFinish(char[][] fields, char charPlayer) {
+    private static boolean isGameFinish(char[][] fields, char charPlayer) {
         // Zeilen überprüfen - horizontal - nebeneinander
         boolean gameIsFinish = false;
         int counter = 0;
@@ -137,10 +296,10 @@ public class VierGewinnt {
                         counter = 0;
                     }
                 }
-            }
-            if (counter >= 4) {
-                gameIsFinish = true;
-                break;
+                if (counter >= 4) {
+                    gameIsFinish = true;
+                    break;
+                }
             }
 
         }
