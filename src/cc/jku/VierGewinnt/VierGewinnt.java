@@ -12,6 +12,8 @@ public class VierGewinnt {
         char charPlayer1 = 'O';
         char charPlayer2 = 'X';
 
+        boolean isPlayer2Computer = isPlayer2Computer();
+
 
         boolean isFinish = false;
         boolean player2IsActive = false;
@@ -29,8 +31,12 @@ public class VierGewinnt {
                 isFinish = isGameFinish(fields, charPlayer1);
 
             } else {
-                //selectAColumn(numberOfLines, numberOfColumns, fields, charPlayer2);
-                computerMakeChoice(fields, charPlayer2);
+                if (!isPlayer2Computer) {
+                    selectAColumn(fields, charPlayer2);
+                } else {
+                    computerMakeChoice(fields, charPlayer2);
+                }
+
                 player2IsActive = !player2IsActive;
 
                 printTheGame(fields);
@@ -43,18 +49,36 @@ public class VierGewinnt {
 
     }
 
+    private static boolean isPlayer2Computer() {
+        boolean isPlayer2Computer = false;
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Do you want to play against the computer? type 'yes', else 'no': ");
+        String inputString ="";
+
+        try {
+            inputString = scanner.nextLine() ;
+        } catch (Exception e) {
+        }
+
+        if (inputString.equalsIgnoreCase("yes")) {
+            System.out.println("You play against the computer");
+            isPlayer2Computer = true;
+        }
+
+        return isPlayer2Computer;
+    }
+
     private static void computerMakeChoice(char[][] fields, char charComputer) {
+        // is not finisch
         int numberOfLines = fields.length;
         int numberOfColumns = fields[0].length;
         int actualColumn = numberOfColumns / 2;
         boolean computerMadeChoice = false;
 
-
         boolean isSelectinOk = false;
         int selectedColumnComputer = -1;
 
         while (!isSelectinOk) {
-
 
             for (int searchNumberOfCharsInLine = 3; searchNumberOfCharsInLine > 0; searchNumberOfCharsInLine--) {
                 System.out.println("wir suchen " + searchNumberOfCharsInLine + " Steine nebeneinander");
@@ -105,10 +129,8 @@ public class VierGewinnt {
                                         }
                                     }
 
-
                                     // Überprüfen ob 4 Steine nebeneinander  Platz haben
                                     if ((emptyFieldsOnLeftSideOrComputerChar + counter + emptyFieldsOnRightSideOrComputerCahr) >= 4) {
-
 
                                         // Stein auf der rechten Seite ergänzen
                                         if ((column + 1) < fields[0].length) {
@@ -128,10 +150,8 @@ public class VierGewinnt {
                                                     computerMadeChoice = true;
                                                 }
 
-
                                             }
                                         }
-
 
                                         if (!computerMadeChoice) {
 
@@ -152,25 +172,19 @@ public class VierGewinnt {
                                                         selectedColumnComputer = column - searchNumberOfCharsInLine;
                                                         computerMadeChoice = true;
                                                     }
-
                                                 }
-
                                             }
                                         }
                                     }
                                 }
-
                             }
                             if (computerMadeChoice) {
                                 break;
                             }
-
                         }
-
                         if (computerMadeChoice) {
                             break;
                         }
-
                     }
                 }
 
@@ -193,7 +207,6 @@ public class VierGewinnt {
                                 counter = 0; // wenn es ein anderes Zeichen ist, dann den Counter rücksetzen
                             }
 
-
                         }
                         if (counter >= searchNumberOfCharsInLine) {
                                 /*
@@ -214,16 +227,15 @@ public class VierGewinnt {
                 }
 
                 if (!computerMadeChoice) {
-                    // Diagonale überprüfen
+                    // Diagonale überprüfen --> noch nicht fertig
                     System.out.println("Diagonale prüfen");
 
 
                     for (int line = (4 - searchNumberOfCharsInLine); line <= (fields.length - searchNumberOfCharsInLine); line++) {
-                    //for (int line = 0; line <= (fields.length - searchNumberOfCharsInLine); line++) {
+                        //for (int line = 0; line <= (fields.length - searchNumberOfCharsInLine); line++) {
                         // Diagonale links oben nach rechts unten prüfen
                         for (int column = (4 - searchNumberOfCharsInLine); column <= (fields[0].length - searchNumberOfCharsInLine); column++) {
-                        //for (int column = 0; column <= (fields[0].length - searchNumberOfCharsInLine); column++) {
-
+                            //for (int column = 0; column <= (fields[0].length - searchNumberOfCharsInLine); column++) {
 
                             int counterDiagonal = 0;
 
@@ -232,8 +244,6 @@ public class VierGewinnt {
                                 if (fields[line + i][column + i] == charComputer) {
                                     counterDiagonal++;
                                 }
-
-
                             }
                             System.out.println("Conter Diagonale: " + counterDiagonal);
 
