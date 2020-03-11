@@ -27,7 +27,12 @@ public class SchiffeVersenken {
 
         printBattleship(gameFieldsPlayer1);
 
-        String playersChoice = playersChoice();
+        boolean gameIsFinish = false;
+        while (!gameIsFinish) {
+            String playersChoice = playersChoice();
+
+        /*
+        das war zum testen
 
 
         int xPosition = playersChoice.charAt(0) - 65;//65 ist 'A'
@@ -41,26 +46,69 @@ public class SchiffeVersenken {
         } else {
             gameFieldsPlayer2[yPosition][xPosition] = ' ';
         }
+        */
 
-        printBattleship(gameFieldsPlayer2);
+
+            gameFieldsPlayer2 = gameFields(shipPositionsPlayer1, gameFieldsPlayer2, playersChoice);
+            printBattleship(gameFieldsPlayer2);
+
+            gameIsFinish = isGameFinish(shipPositionsPlayer1,gameFieldsPlayer2, "Test Player");
+
+
+        }
 
 
     }
 
-    private static boolean isShootOk(char[][] shipPositions, char[][] gameFields, String shootPosition) {
+    private static boolean isGameFinish(char[][] shipPositions, char[][] gameFields, String player) {
+        boolean isGameFinishIntern = true;
+        for (int y = 0; y < gameFields.length; y++) {
+            for (int x = 0; x < gameFields[0].length; x++) {
+                if (((shipPositions[y][x]) != 0)) { // Schiff ist an der Position
+                    if ((shipPositions[y][x] != gameFields[y][x])) { // Schiff wurde noch nicht getrofen
+                        isGameFinishIntern = false;
+                    }
+                }
+            }
+        }
+
+        if(isGameFinishIntern){
+            System.out.println("Game is finisch! Player '" + player + "' won the game!");
+        }
+
+        return isGameFinishIntern;
+
+    }
+
+
+    private static char[][] gameFields(char[][] shipPositions, char[][] gameFields, String shootPosition) {
         boolean isShootOk = true;
+        char[][] tempGameFields = gameFields;
 
         int xPosition = shootPosition.charAt(0) - 65;//65 ist 'A'
         String yPositionString = shootPosition.substring(shootPosition.indexOf('/') + 1, shootPosition.length());
         int yPosition = Integer.parseInt(yPositionString) - 1;
         if ((xPosition < 0) || (xPosition > shipPositions[0].length)) {
             isShootOk = false;
-
-        } else if ((yPosition < 0) || (yPosition>shipPositions.length)){
+        } else if ((yPosition < 0) || (yPosition > shipPositions.length)) {
             isShootOk = false;
         }
 
-        return isShootOk;
+        if (!isShootOk) {
+            isShootOk = false;
+        } else if ((tempGameFields[yPosition][xPosition]) == '-') {
+            if ((shipPositions[yPosition][xPosition]) == ' ') { // kein Schiff
+                tempGameFields[yPosition][xPosition] = ' ';
+                System.out.println("Kein treffer!");
+            } else { // Schiff getroffen
+                tempGameFields[yPosition][xPosition] = shipPositions[yPosition][xPosition];
+                System.out.println("Schiff getroffen!");
+            }
+        } else {
+            isShootOk = false;
+        }
+
+        return tempGameFields;
 
 
     }
@@ -74,10 +122,10 @@ public class SchiffeVersenken {
         return inputString;
     }
 
-    private static void makeDefaultSetingsForFields(char[][] gameFieldsPlayer1) {
-        for (int y = 0; y < gameFieldsPlayer1.length; y++) {
-            for (int x = 0; x < gameFieldsPlayer1[0].length; x++) {
-                gameFieldsPlayer1[y][x] = '-';
+    private static void makeDefaultSetingsForFields(char[][] gameFieldsPlayer) {
+        for (int y = 0; y < gameFieldsPlayer.length; y++) {
+            for (int x = 0; x < gameFieldsPlayer[0].length; x++) {
+                gameFieldsPlayer[y][x] = '-';
             }
         }
     }
