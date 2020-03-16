@@ -9,10 +9,8 @@ public class Main {
         FuelTank fuelTank1 = new FuelTank(57);
         FuelTank fuelTank2 = new FuelTank(58);
 
-
         Car firstCar = new Car("Mazda", engine1, "blue", 6, "M123", fuelTank1);
         Car secondCar = new Car("VW", engine2, "green", 5, "VW213", fuelTank2);
-
 
         firstCar.getFuelTank().fillUpFuel(50);
         secondCar.getFuelTank().fillUpFuel(77);

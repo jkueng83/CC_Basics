@@ -17,14 +17,9 @@ public class Car {
     private String brand;
     private String serialNumber = "";
     private Engine engine;
-
     private FuelTank fuelTank;
-
     private String color = "";
     private double fuelConsumption = 5.0; // l per 100 km
-
-    //private double fuelAmountCapacity = 60.0;
-    //private double fuelAmount = fuelAmountCapacity;
 
     public Car(String brand, Engine engine, String color, double fuelConsumption, String serialNumber, FuelTank fuelTank) {
 
@@ -35,7 +30,6 @@ public class Car {
         this.serialNumber = serialNumber;
         this.fuelTank = fuelTank;
     }
-
 
     public double getRemainingRange() {
         double remaindingRange = this.getFuelTank().getFuelAmount() / this.fuelConsumption * 100;
@@ -65,13 +59,11 @@ public class Car {
 
     }
 
-
     // Methode
     public void drive(double speed) { // speed in km/h
 
         double fuelConsumption = 0.0005 * speed * speed - 0.09 * speed + 10;
         System.out.println("the fule consumption ist " + fuelConsumption);
-
 
         this.getFuelTank().usedFuel(fuelConsumption);
         System.out.println("i am driving with " + speed + " km/h");
