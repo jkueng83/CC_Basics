@@ -3,8 +3,14 @@ package cc.jku.OOCar;
 public class Main {
     public static void main(String[] args) {
 
-        Car firstCar = new Car("blue", 6, "M123", 60);
-        Car secondCar = new Car("green", 5, "VW213", 50);
+        Engine engine1 = new Engine(104, Engine.TYPE.DIESEL);
+        Engine engine2 = new Engine(160, Engine.TYPE.PETROL);
+
+
+
+
+        Car firstCar = new Car("Mazda",engine1,"blue", 6, "M123", 60);
+        Car secondCar = new Car("VW",engine2, "green", 5, "VW213", 50);
 
         firstCar.turboBoost();
         firstCar.printFuelAmount();

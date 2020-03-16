@@ -13,14 +13,18 @@ Füge eine Methode getRemainingRange() ein. Diese Methode liefert die Rest-Reich
  */
 
 public class Car {
+
+    private String brand;
+    private String serialNumber = "";
+    private Engine engine;
     private String color = "";
     private double fuelConsumption = 5.0; // l per 100 km
-    private String serialNumber = "";
     private double fuelAmountCapacity = 60.0;
     private double fuelAmount = fuelAmountCapacity;
 
+
     public double getRemainingRange() {
-        double remaindingRange = this.fuelAmount / this.fuelConsumption * 100 ;
+        double remaindingRange = this.fuelAmount / this.fuelConsumption * 100;
         System.out.println("the remainding Range is " + remaindingRange + " [km]");
         return remaindingRange;
     }
@@ -30,6 +34,9 @@ public class Car {
         for (int i = 0; i < amountOfRepetitions; i++) {
             System.out.println("Tuuut");
         }
+
+        System.out.println("i am a " + this.brand + " and my color is " + this.color +
+                " and have " + this.getEngine().getHorsePower() + " horse power");
 
     }
 
@@ -44,8 +51,10 @@ public class Car {
 
     }
 
-    public Car(String color, double fuelConsumption, String serialNumber, double fuelAmount) {
+    public Car(String brand, Engine engine, String color, double fuelConsumption, String serialNumber, double fuelAmount) {
 
+        this.brand = brand;
+        this.engine = engine;
         this.color = color;
         this.fuelConsumption = fuelConsumption;
         this.serialNumber = serialNumber;
@@ -71,5 +80,13 @@ public class Car {
 
         System.out.println("i am breaking");
 
+    }
+
+    public Engine getEngine() {
+        return engine;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
 }
