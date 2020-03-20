@@ -14,14 +14,14 @@ public class Main {
         RearMirror r1 = new RearMirror(100,0);
         RearMirror r2 = new RearMirror(90, -40);
 
-
-
         Car firstCar = new Car("Mazda", engine1, "blue", 6, "M123", fuelTank1);
+
         // mirrors
         firstCar.addMirror(r1);
         firstCar.addMirror(r2);
         System.out.println("mirror positoin 0: " + firstCar.getMirrors().get(0).getPosition());
         System.out.println("mirror positoin 1: " + firstCar.getMirrors().get(1).getPosition());
+
         // tires - unterschiedliche Werte zum testen
         Tire tire1 = new Tire(195,65,"R",15,91,"H");
         Tire tire2 = new Tire(205,50,"R",16,92,"I");
