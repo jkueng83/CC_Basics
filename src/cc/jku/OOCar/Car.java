@@ -12,12 +12,17 @@ Füge eine Methode getRemainingRange() ein. Diese Methode liefert die Rest-Reich
     Diese wird berechnet über den Tankstand und den Verbrauch.
  */
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Car {
 
     private String brand;
     private String serialNumber = "";
     private Engine engine;
     private FuelTank fuelTank;
+    private List<RearMirror> mirrors ;
+    private List<Tire> tires ;
     private String color = "";
     private double fuelConsumption = 5.0; // l per 100 km
 
@@ -29,6 +34,24 @@ public class Car {
         this.fuelConsumption = fuelConsumption;
         this.serialNumber = serialNumber;
         this.fuelTank = fuelTank;
+        this.mirrors = new ArrayList<>();
+        this.tires = new ArrayList<>();
+    }
+
+    public void addTire (Tire tire){
+        this.tires.add(tire);
+    }
+
+    public List<Tire> getTires() {
+        return tires;
+    }
+
+    public void addMirror(RearMirror rearMirror){
+        this.mirrors.add(rearMirror);
+    }
+
+    public List<RearMirror> getMirrors() {
+        return mirrors;
     }
 
     public double getRemainingRange() {
