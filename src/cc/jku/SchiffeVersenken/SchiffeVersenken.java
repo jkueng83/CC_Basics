@@ -18,42 +18,65 @@ public class SchiffeVersenken {
         makeDefaultSettingsForFields(gameFieldsPlayer1);
         makeDefaultSettingsForFields(gameFieldsPlayer2);
 
-
+        /*
         shipPositionsPlayer1[5][5] = 'Z';
         shipPositionsPlayer1[5][6] = 'Z';
         shipPositionsPlayer1[5][7] = 'Z';
-
-        shipPositionsPlayer1 = setShipPositions(shipPositionsPlayer1);
-
-        printBattleship(shipPositionsPlayer1);
-
-        printBattleship(gameFieldsPlayer1);
-
-        boolean gameIsFinish = false;
-        while (!gameIsFinish) {
-            String playersChoice = playersChoice();
-
-        /*
-        das war zum testen
-
-        int xPosition = playersChoice.charAt(0) - 65;//65 ist 'A'
-        String yPositionString = playersChoice.substring(playersChoice.indexOf('/') + 1, playersChoice.length());
-        int yPosition = Integer.parseInt(yPositionString) - 1;
-        System.out.println(xPosition);
-        System.out.println(yPosition);
-
-        if (shipPositionsPlayer1[yPosition][xPosition] != 0) {
-            gameFieldsPlayer2[yPosition][xPosition] = 'X';
-        } else {
-            gameFieldsPlayer2[yPosition][xPosition] = ' ';
-        }
         */
 
+        String player1Name = "Johannes";
+        String player2Name = "Hans";
 
-            gameFieldsPlayer2 = gameFields(shipPositionsPlayer1, gameFieldsPlayer2, playersChoice);
-            printBattleship(gameFieldsPlayer2);
+        if (true) {
+            // Schiffe über Konsole eingeben
+            shipPositionsPlayer1 = setShipPositions(shipPositionsPlayer1, player1Name);
+            shipPositionsPlayer2 = setShipPositions(shipPositionsPlayer2, player2Name);
+        } else {
+            // zum Testen damit die Schiffe nicht eigegeben werden müssen
+            for (int i = 0; i < 5; i++) {
+                shipPositionsPlayer1[0][i] = 'S';
+                shipPositionsPlayer2[i][0] = 'S';
+            }
 
-            gameIsFinish = isGameFinish(shipPositionsPlayer1, gameFieldsPlayer2, "Test Player");
+        }
+
+        boolean gameIsFinish = false;
+        boolean player1IsActive = true;
+        while (!gameIsFinish) {
+            boolean isShootOk = false;
+
+            if (player1IsActive) {
+                System.out.println("Spielfeld von " + player1Name);
+                printBattleship(gameFieldsPlayer1);
+
+                String playersChoice = playersChoice(player1Name);
+
+                isShootOk = isShootOk(shipPositionsPlayer2, gameFieldsPlayer1, playersChoice);
+
+                printBattleship(gameFieldsPlayer1);
+
+                gameIsFinish = isGameFinish(shipPositionsPlayer2, gameFieldsPlayer1, player1Name);
+
+                if (isShootOk) {
+                    player1IsActive = false;
+                }
+
+            } else {
+                System.out.println("Spielfeld von " + player2Name);
+                printBattleship(gameFieldsPlayer2);
+
+                String playersChoice = playersChoice(player2Name);
+
+                isShootOk = isShootOk(shipPositionsPlayer1, gameFieldsPlayer2, playersChoice);
+                printBattleship(gameFieldsPlayer2);
+
+                gameIsFinish = isGameFinish(shipPositionsPlayer1, gameFieldsPlayer2, player2Name);
+
+                if (isShootOk) {
+                    player1IsActive = true;
+                }
+
+            }
 
 
         }
@@ -61,7 +84,7 @@ public class SchiffeVersenken {
 
     }
 
-    private static char[][] setShipPositions(char[][] shipPositionsPlayer) {
+    private static char[][] setShipPositions(char[][] shipPositionsPlayer, String playersName) {
 
             /*
             1 Schlachtschiff (5 Kästchen)
@@ -70,21 +93,64 @@ public class SchiffeVersenken {
             4 U Boote (je 2 Kästchen)
             */
 
+        // Überschrift Drucken
+        int lengthText = playersName.length() + 47;
+        for (int i = 0; i < lengthText; i++) {
+            System.out.print("#");
+        }
+        System.out.println();
+
+        System.out.println("#####  '" + playersName + "' bitte platziere deine Schiffe.  #####");
+
+        for (int i = 0; i < lengthText; i++) {
+            System.out.print("#");
+        }
+        System.out.println();
+
         char[][] shipPositon = new char[shipPositionsPlayer.length][shipPositionsPlayer[0].length];
         shipPositon = shipPositionsPlayer;
 
-        //printBattleship(shipPositon);
-
-        boolean isShipPositionOk = false;
         // 1 Schlachtschiff (5 Kästchen)
+        setShipOnPosition(shipPositon, 5, "Schlachtschiff", 'S', 1, playersName);
+
+        // 2 Kreuzer (je 4 Kästchen)
+        setShipOnPosition(shipPositon, 4, "Kreuzer", 'K', 1, playersName);
+
+        // 3 Zerstörer (je 3 Kästchen)
+        setShipOnPosition(shipPositon, 3, "Zerstörer", 'Z', 1, playersName);
+
+        // 4 U Boote (je 2 Kästchen)
+        setShipOnPosition(shipPositon, 2, "U-Boot", 'U', 1, playersName);
+
+        return shipPositon;
+    }
+
+    private static void setShipOnPosition(char[][] shipPositon, int shipLength, String shipName, char shipChar,
+                                          int numberOfShips, String playersName) {
+
+        int setNumberOfShips = 0;
+
+        while (setNumberOfShips < numberOfShips) {
+            boolean newShipIsSetOnPosition = false;
+            newShipIsSetOnPosition = shipIsSetOnPosition(shipPositon, shipLength, shipName, shipChar, playersName);
+
+            if (newShipIsSetOnPosition) {
+                setNumberOfShips++;
+            }
+        }
+    }
+
+    private static boolean shipIsSetOnPosition(char[][] shipPosition, int shipLength, String shipName, char shipChar,
+                                               String playersName) {
+        boolean isShipPositionOk = false;
+
         while (!isShipPositionOk) {
-            int shipLength = 5;
-            char shipChar = 'S';
-            printBattleship(shipPositon);
-            System.out.println("Positionieren Sie 1 Schlachtschff mit der Länge von " + shipLength + " Kästchen.");
+
+            printBattleship(shipPosition);
+            System.out.println("Positionieren Sie ein '" + shipName + "' mit der Länge von " + shipLength + " Kästchen.");
             boolean isHorizontal = isHorizontal();
-            System.out.println("Geben sie die Start Koordinate des Schlachtschiffes an: ");
-            String shipStartPosition = playersChoice();
+            System.out.println("Geben sie die Start Koordinate vom " + shipName + " an:");
+            String shipStartPosition = playersChoice(playersName);
             int xPositionStart = getXPosition(shipStartPosition);
             int yPositionStart = getYPosition(shipStartPosition);
             int xPositionEnd = xPositionStart;
@@ -96,22 +162,21 @@ public class SchiffeVersenken {
                 yPositionEnd = yPositionStart + shipLength - 1;
             }
 
-            if (yPositionEnd > shipPositon.length) {
+            if ((yPositionStart < 0) || (yPositionEnd >= shipPosition.length)) {
                 System.out.println("Y Koordinaten ungültig");
                 continue;
             }
 
-            if (xPositionEnd > shipPositon[0].length) {
+            if ((xPositionStart < 0) || (xPositionEnd >= shipPosition[0].length)) {
                 System.out.println("X Koordinaten ungültig");
                 continue;
             }
-
 
             boolean fieldsEmpty = true;
 
             for (int y = yPositionStart; y <= yPositionEnd; y++) {
                 for (int x = xPositionStart; x <= xPositionEnd; x++) {
-                    if (shipPositon[y][x] != 0) {
+                    if (shipPosition[y][x] != 0) {
                         fieldsEmpty = false;
                     }
                 }
@@ -123,21 +188,17 @@ public class SchiffeVersenken {
             } else {
                 for (int y = yPositionStart; y <= yPositionEnd; y++) {
                     for (int x = xPositionStart; x <= xPositionEnd; x++) {
-                        shipPositon[y][x] = shipChar;
+                        shipPosition[y][x] = shipChar;
+                        isShipPositionOk = true;
                     }
                 }
 
-                printBattleship(shipPositon);
+                printBattleship(shipPosition);
             }
 
 
         }
-        // 2 Kreuzer (je 4 Kästchen)
-        // 3 Zerstörer (je 3 Kästchen)
-        // 4 U Boote (je 2 Kästchen)
-
-
-        return shipPositon;
+        return isShipPositionOk;
     }
 
     private static boolean isHorizontal() {
@@ -170,7 +231,7 @@ public class SchiffeVersenken {
     }
 
 
-    private static char[][] gameFields(char[][] shipPositions, char[][] gameFields, String shootPosition) {
+    private static char[][] makeStootOnGameFields(char[][] shipPositions, char[][] gameFields, String shootPosition) {
         boolean isShootOk = true;
         char[][] tempGameFields = gameFields;
 
@@ -201,17 +262,62 @@ public class SchiffeVersenken {
 
     }
 
+    private static boolean isShootOk(char[][] shipPositions, char[][] gameFields, String shootPosition) {
+        boolean isShootOk = true;
+        //char[][] tempGameFields = gameFields;
+
+        int xPosition = getXPosition(shootPosition);
+        int yPosition = getYPosition(shootPosition);
+        if ((xPosition < 0) || (xPosition > shipPositions[0].length)) {
+            isShootOk = false;
+        } else if ((yPosition < 0) || (yPosition > shipPositions.length)) {
+            isShootOk = false;
+        }
+
+        if (!isShootOk) {
+            isShootOk = false;
+        } else if ((gameFields[yPosition][xPosition]) == '-') {
+            if ((shipPositions[yPosition][xPosition]) == ' ') { // kein Schiff
+                gameFields[yPosition][xPosition] = ' ';
+                System.out.println("Kein treffer!");
+            } else { // Schiff getroffen
+                gameFields[yPosition][xPosition] = shipPositions[yPosition][xPosition];
+                System.out.println("Schiff getroffen!");
+            }
+        } else {
+            isShootOk = false;
+        }
+
+        return isShootOk;
+    }
+
     private static int getYPosition(String shootPosition) {
-        String yPositionString = shootPosition.substring(shootPosition.indexOf('/') + 1, shootPosition.length());
-        return Integer.parseInt(yPositionString) - 1;
+        int yPosition = -1;
+
+        try {
+            String yPositionString = shootPosition.substring(shootPosition.indexOf('/') + 1, shootPosition.length());
+            yPosition = Integer.parseInt(yPositionString) - 1;
+        } catch (Exception e) {
+            System.out.println("Falsche Eingabe der Y Koordinate");
+        }
+
+        return yPosition;
     }
 
     private static int getXPosition(String shootPosition) {
-        return shootPosition.charAt(0) - 65; //65 ist 'A'
+        int xPosition = -1;
+
+        try {
+            xPosition = shootPosition.charAt(0) - 65; //65 ist 'A'
+        } catch (Exception e) {
+            System.out.println("Falsche Eingabe der X Koordinate");
+        }
+
+        return xPosition;
     }
 
-    private static String playersChoice() {
-        System.out.println("Koordinate eingeben (x/y) ");
+    private static String playersChoice(String plyersName) {
+        System.out.println(plyersName + " bitte eine Koordinate eingeben (x/y) ");
         Scanner scanner = new Scanner(System.in);
         String inputString = scanner.nextLine();
         inputString = inputString.toUpperCase();
@@ -234,7 +340,6 @@ public class SchiffeVersenken {
 
             System.out.print(" " + charPrint + " |");  // Beschriftung X-Achse drucken
             charPrint += 1; // nächstes Zeichen - Es wird mit A gestartet , dann B , ....
-
         }
 
         System.out.print("\n");// neue Zeile
@@ -247,12 +352,9 @@ public class SchiffeVersenken {
                     charPrint = ' ';
                 }
                 System.out.print(charPrint + " | ");
-
             }
             System.out.print("\n");
-
         }
         System.out.println();
-
     }
 }
