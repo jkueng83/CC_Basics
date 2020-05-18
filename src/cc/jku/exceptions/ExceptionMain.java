@@ -13,7 +13,7 @@ public class ExceptionMain {
             System.out.println(strings.get(0));  // im Element 0 steht noch nichts!!!
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println("Exception ehler: " + e.getMessage());
+            System.out.println("Exception Fehler: " + e.getMessage());
         }
 
         Calculator calculator = new Calculator();
