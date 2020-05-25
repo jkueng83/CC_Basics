@@ -6,7 +6,7 @@ import java.io.IOException;
 
 public class MainWrite {
     public static void main(String[] args) {
-        File file = new File("./testdata/WriteFile.txt");
+        File file = new File("./testdata/WriteFile.txt"); // Pfad der Datei
 
         DateTimeString DTS = new DateTimeString();
 
