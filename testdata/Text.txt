@@ -1,0 +1,3 @@
+Johannes;Küng;Koblach
+Olaf;Schulz;Hamburg
+Franz;Müller;Dornbirn
