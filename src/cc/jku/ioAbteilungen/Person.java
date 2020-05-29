@@ -9,6 +9,6 @@ public class Person {
     }
 
     public void printPersonName(){
-        System.out.println("My name is: " + this.name);
+        System.out.println("Name: " + this.name);
     }
 }
