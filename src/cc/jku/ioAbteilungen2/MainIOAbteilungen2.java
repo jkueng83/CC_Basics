@@ -27,14 +27,17 @@ public class MainIOAbteilungen2 {
         File file = new File("./testdata/Abteilungen1 (2).txt");
 
         try {
+
             FileReader fileReader = new FileReader(file);
             BufferedReader bufferedReader = new BufferedReader(fileReader);
 
             String readLine = null;
+
             while ((readLine = bufferedReader.readLine()) != null) {
                 //System.out.println("string in line: " + readLine); // zum Testen
 
                 strings = readLine.split(";");
+
                 for (int i = 0; i < strings.length; i++) {
                     strings[i] = strings[i].strip();
                    //System.out.println("." + strings[i] + "."); // zum Testen
@@ -48,8 +51,9 @@ public class MainIOAbteilungen2 {
 
                 if (strings.length > 1) {
                     departmentName = strings[1];
-                } else
+                } else {
                     departmentName = "";
+                }
 
                 if (strings.length > 2) {
                     parentDepartmentName = strings[2];
@@ -60,10 +64,10 @@ public class MainIOAbteilungen2 {
                 if (!name.equalsIgnoreCase("PersonenName")) {
 
                     Person person = new Person(name);
-
                     boolean departmentExists = false;
 
                     for (Department2 parentDepartment : departments) {
+
                         if (parentDepartment.getName().equalsIgnoreCase(departmentName)) {
                             // Persone einer Bestehenden Abteilung zuordnen.
                             departmentExists = true;
@@ -75,22 +79,25 @@ public class MainIOAbteilungen2 {
 
                     if (!departmentExists) {
                         // Person einer neuen Abteilung zuordnen.
+
                         Department2 newDepartment = new Department2(departmentName);
                         departments.add(newDepartment);
                         newDepartment.addPerson(person);
 
                         if (!parentDepartmentName.equalsIgnoreCase("")) {
                             // Department dem Parent Department zuordnen.
+
                             for (Department2 department : departments) {
+
                                 if (department.getName().equalsIgnoreCase(parentDepartmentName)) {
                                     department.addChildDepartment(newDepartment);
                                 }
 
                             }
+
                         }
 
                     }
-
 
                 }
 
@@ -103,7 +110,6 @@ public class MainIOAbteilungen2 {
         }
 
         departments.get(0).printAllMembers();
-
 
     }
 }
