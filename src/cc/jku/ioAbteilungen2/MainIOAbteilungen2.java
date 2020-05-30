@@ -17,7 +17,7 @@ public class MainIOAbteilungen2 {
         einer Abteilung zu, sondern bauen auch einen Abteilungsbaum und ordnen Abteilungen untereinander zu.
          */
 
-        List<Department2> departments = new ArrayList<>();
+        List<DepartmentWithChildDepartment> departments = new ArrayList<>();
 
         String name;
         String departmentName;
@@ -66,7 +66,7 @@ public class MainIOAbteilungen2 {
                     Person person = new Person(name);
                     boolean departmentExists = false;
 
-                    for (Department2 parentDepartment : departments) {
+                    for (DepartmentWithChildDepartment parentDepartment : departments) {
 
                         if (parentDepartment.getName().equalsIgnoreCase(departmentName)) {
                             // Persone einer Bestehenden Abteilung zuordnen.
@@ -80,14 +80,14 @@ public class MainIOAbteilungen2 {
                     if (!departmentExists) {
                         // Person einer neuen Abteilung zuordnen.
 
-                        Department2 newDepartment = new Department2(departmentName);
+                        DepartmentWithChildDepartment newDepartment = new DepartmentWithChildDepartment(departmentName);
                         departments.add(newDepartment);
                         newDepartment.addPerson(person);
 
                         if (!parentDepartmentName.equalsIgnoreCase("")) {
                             // Department dem Parent Department zuordnen.
 
-                            for (Department2 department : departments) {
+                            for (DepartmentWithChildDepartment department : departments) {
 
                                 if (department.getName().equalsIgnoreCase(parentDepartmentName)) {
                                     department.addChildDepartment(newDepartment);

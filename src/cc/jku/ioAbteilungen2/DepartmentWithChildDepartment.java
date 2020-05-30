@@ -5,20 +5,20 @@ import cc.jku.ioAbteilungen.Department;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Department2 extends Department {
+public class DepartmentWithChildDepartment extends Department {
 
-    private List<Department2> childDepartments;
+    private List<DepartmentWithChildDepartment> childDepartments;
 
-    public Department2(String name) {
+    public DepartmentWithChildDepartment(String name) {
 
         super(name);
         this.childDepartments = new ArrayList<>();
 
     }
 
-    public void addChildDepartment(Department2 parentDepartment) {
+    public void addChildDepartment(DepartmentWithChildDepartment childDepartment) {
 
-        this.childDepartments.add(parentDepartment);
+        this.childDepartments.add(childDepartment);
 
     }
 
@@ -28,10 +28,10 @@ public class Department2 extends Department {
 
         if (this.childDepartments.size() > 0) {
 
-            for (Department2 parentDepartment : this.childDepartments) {
+            for (DepartmentWithChildDepartment department : this.childDepartments) {
 
                 System.out.println("-- child department of \"" + this.getName() + "\":");
-                parentDepartment.printAllMembers();
+                department.printAllMembers();
 
             }
 
