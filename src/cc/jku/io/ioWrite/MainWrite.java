@@ -1,4 +1,4 @@
-package cc.jku.ioWrite;
+package cc.jku.io.ioWrite;
 
 import java.io.File;
 import java.io.FileWriter;

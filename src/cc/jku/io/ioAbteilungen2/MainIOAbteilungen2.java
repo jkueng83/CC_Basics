@@ -1,6 +1,6 @@
-package cc.jku.ioAbteilungen2;
+package cc.jku.io.ioAbteilungen2;
 
-import cc.jku.ioAbteilungen.Person;
+import cc.jku.io.ioAbteilungen.Person;
 
 import java.io.*;
 import java.util.ArrayList;

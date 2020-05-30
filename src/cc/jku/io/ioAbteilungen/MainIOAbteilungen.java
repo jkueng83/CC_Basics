@@ -1,4 +1,4 @@
-package cc.jku.ioAbteilungen;
+package cc.jku.io.ioAbteilungen;
 
 import java.io.BufferedReader;
 import java.io.File;

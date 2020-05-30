@@ -1,4 +1,4 @@
-package cc.jku.ioAbteilungen;
+package cc.jku.io.ioAbteilungen;
 
 import java.util.ArrayList;
 import java.util.List;
